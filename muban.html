@@ -1,0 +1,818 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>精品家具 - 中古风家具展示</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "PingFang SC", "Helvetica Neue", Arial, sans-serif;
+        }
+        
+        body {
+            background-color: #f8f8f8;
+            color: #333;
+            max-width: 750px;
+            margin: 0 auto;
+            padding-bottom: 20px;
+        }
+        
+        header {
+            background: linear-gradient(135deg, #8B7355 0%, #6D5D47 100%);
+            color: white;
+            padding: 15px;
+            text-align: center;
+            font-size: 18px;
+            font-weight: bold;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .header-title {
+            flex: 1;
+            text-align: center;
+        }
+        
+        .back-btn {
+            background: rgba(255,255,255,0.2);
+            border: none;
+            color: white;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .back-btn:hover {
+            background: rgba(255,255,255,0.3);
+        }
+        
+        /* 页面容器 */
+        .page {
+            display: none;
+        }
+        
+        .page.active {
+            display: block;
+        }
+        
+        /* 首页样式 */
+        .category-container {
+            display: flex;
+            flex-wrap: wrap;
+            background-color: #fff;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 0 0 10px 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        
+        .category-item {
+            width: 33.33%;
+            padding: 12px 8px;
+            text-align: center;
+            border-bottom: 1px solid #f0f0f0;
+            border-right: 1px solid #f0f0f0;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .category-item:nth-child(3n) {
+            border-right: none;
+        }
+        
+        .category-item:hover {
+            background-color: #f9f9f9;
+        }
+        
+        .category-item.active {
+            color: #8B7355;
+            font-weight: bold;
+            background-color: #f5f2ee;
+        }
+        
+        .category-icon {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 8px;
+            background-color: #f5f2ee;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #8B7355;
+            font-size: 24px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            overflow: hidden;
+        }
+        
+        .category-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .category-name {
+            font-size: 13px;
+            line-height: 1.3;
+        }
+        
+        /* 商品列表页样式 */
+        .product-container {
+            background-color: #fff;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        
+        .section-title {
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #f0f0f0;
+            color: #8B7355;
+        }
+        
+        .product-list {
+            display: none;
+        }
+        
+        .product-list.active {
+            display: block;
+        }
+        
+        .product-item {
+            display: flex;
+            padding: 15px 0;
+            border-bottom: 1px solid #f0f0f0;
+            transition: all 0.3s ease;
+        }
+        
+        .product-item:hover {
+            background-color: #f9f9f9;
+            transform: translateY(-2px);
+        }
+        
+        .product-image {
+            width: 280px;
+            height: 220px;
+            background: linear-gradient(135deg, #f5f2ee 0%, #e8e2d9 100%);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #8B7355;
+            margin-right: 15px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            overflow: hidden;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+        
+        .product-image:hover {
+            transform: scale(1.05);
+        }
+        
+        .product-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .product-info {
+            flex: 1;
+        }
+        
+        .product-name {
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 8px;
+            color: #333;
+        }
+        
+        .product-price {
+            color: #8B7355;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+        
+        .product-spec {
+            font-size: 14px;
+            color: #666;
+            line-height: 1.5;
+        }
+        
+        .spec-title {
+            color: #999;
+            margin-top: 8px;
+            font-size: 13px;
+        }
+        
+        .color-options {
+            display: flex;
+            margin-top: 5px;
+        }
+        
+        .color-option {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            margin-right: 8px;
+            border: 1px solid #eee;
+        }
+        
+        .color-cherry {
+            background-color: #A0522D;
+        }
+        
+        .color-white {
+            background-color: #f5f5f5;
+        }
+        
+        .color-black {
+            background-color: #333;
+        }
+        
+        .color-walnut {
+            background-color: #6D493B;
+        }
+        
+        .no-product {
+            text-align: center;
+            padding: 30px;
+            color: #999;
+        }
+        
+        .footer {
+            text-align: center;
+            padding: 15px;
+            color: #999;
+            font-size: 12px;
+        }
+        
+        /* 图片放大模态框样式 */
+        .image-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.9);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+        
+        .image-modal.active {
+            display: flex;
+        }
+        
+        .modal-image {
+            max-width: 90%;
+            max-height: 80%;
+            object-fit: contain;
+            border-radius: 5px;
+        }
+        
+        .modal-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 30px;
+            cursor: pointer;
+        }
+        
+        .image-title {
+            color: white;
+            margin-top: 15px;
+            font-size: 16px;
+        }
+        
+        @media (max-width: 480px) {
+            .category-item {
+                width: 33.33%;
+                padding: 10px 5px;
+            }
+            
+            .category-icon {
+                width: 40px;
+                height: 40px;
+                font-size: 20px;
+            }
+            
+            .category-name {
+                font-size: 12px;
+            }
+            
+            .product-item {
+                flex-direction: column;
+            }
+            
+            .product-image {
+                width: 100%;
+                height: 180px;
+                margin-right: 0;
+                margin-bottom: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 首页 -->
+    <div class="page active" id="home-page">
+        <header>
+            <div class="header-title">
+                <i class="fas fa-couch" style="margin-right: 8px;"></i>精品家具
+            </div>
+            <!-- 首页不需要返回按钮 -->
+            <div style="width: 36px;"></div>
+        </header>
+        
+        <div class="category-container">
+            <div class="category-item" data-category="bookcase">
+                <div class="category-icon">
+                    <img src="https://i.imgs.ovh/2025/09/12/701Gde.jpeg" alt="中古风书桌">
+                </div>
+                <div class="category-name">中古风书桌</div>
+            </div>
+            <div class="category-item" data-category="cabinet">
+                <div class="category-icon">
+                    <img src="https://images.unsplash.com/photo-1555041469-a586c61ea9bc?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" alt="中古风卡门柜">
+                </div>
+                <div class="category-name">中古风卡门柜</div>
+            </div>
+            <div class="category-item" data-category="tvstand">
+                <div class="category-icon">
+                    <img src="D:\photo\7017-电视柜.png" alt="中古风电视柜">
+                </div>
+                <div class="category-name">中古风电视柜</div>
+            </div>
+            <div class="category-item" data-category="table">
+                <div class="category-icon">
+                    <img src="D:\photo\ac.jpg" alt="中古风餐桌">
+                </div>
+                <div class="category-name">中古风餐桌</div>
+            </div>
+            <div class="category-item" data-category="bed">
+                <div class="category-icon">
+                    <img src="D:\photo\A.jpg" alt="中古风床+妆台">
+                </div>
+                <div class="category-name">中古风床+妆台</div>
+            </div>
+            <div class="category-item" data-category="sofa">
+                <div class="category-icon">
+                    <img src="D:\photo\B.jpg" alt="中古风沙发">
+                </div>
+                <div class="category-name">中古风沙发</div>
+            </div>
+            <div class="category-item" data-category="teatable">
+                <div class="category-icon">
+                    <img src="D:\photo\899.jpeg" alt="新款中古风茶几/边几">
+                </div>
+                <div class="category-name">新款中古风茶几/边几</div>
+            </div>
+            <div class="category-item" data-category="shelf">
+                <div class="category-icon">
+                    <img src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" alt="中古风收纳架">
+                </div>
+                <div class="category-name">中古风收纳架</div>
+            </div>
+            <div class="category-item" data-category="drawer">
+                <div class="category-icon">
+                    <img src="https://images.unsplash.com/photo-1555041469-a586c61ea9bc?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" alt="中古风斗柜">
+                </div>
+                <div class="category-name">中古风斗柜</div>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p>精品家具 &copy; 2023 - 中古风家具专家</p>
+        </div>
+    </div>
+    
+    <!-- 商品列表页 -->
+    <div class="page" id="product-list-page">
+        <header>
+            <button class="back-btn" id="backButton">
+                <i class="fas fa-arrow-left"></i>
+            </button>
+            <div class="header-title" id="productPageTitle">商品列表</div>
+            <div style="width: 36px;"></div>
+        </header>
+        
+        <div class="product-container">
+            <div class="section-title" id="productListTitle">产品列表</div>
+            
+            <!-- 中古风书桌产品列表 -->
+            <div class="product-list" id="bookcase-products">
+                <div class="product-item">
+                    <div class="product-image" data-image="https://i.imgs.ovh/2025/09/12/701Gde.jpeg" data-title="中古风窄书桌">
+                        <img src="https://i.imgs.ovh/2025/09/12/701Gde.jpeg" alt="中古风窄书桌">
+                    </div>
+                    <div class="product-info">
+                        <div class="product-name">中古风窄书桌</div>
+                        <div class="product-price">¥1,280 - ¥1,680</div>
+                        <div class="product-spec">
+                            <div class="spec-title">型号：</div>
+                            <div>中古风窄书桌</div>
+                            <div class="spec-title">尺寸：</div>
+                            <div>60*45*/70*45/80*45/90*45/100*45/高度75</div>
+                            <div class="spec-title">颜色：</div>
+                            <div class="color-options">
+                                <div class="color-option color-cherry" title="樱桃色"></div>
+                                <div class="color-option color-white" title="白色"></div>
+                                <div class="color-option color-black" title="黑色"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="product-item">
+                    <div class="product-image" data-image="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" data-title="中古风宽书桌">
+                        <img src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" alt="中古风宽书桌">
+                    </div>
+                    <div class="product-info">
+                        <div class="product-name">中古风宽书桌</div>
+                        <div class="product-price">¥1,580 - ¥1,980</div>
+                        <div class="product-spec">
+                            <div class="spec-title">型号：</div>
+                            <div>中古风宽书桌</div>
+                            <div class="spec-title">尺寸：</div>
+                            <div>120*60*75 / 140*70*75</div>
+                            <div class="spec-title">颜色：</div>
+                            <div class="color-options">
+                                <div class="color-option color-walnut" title="胡桃木色"></div>
+                                <div class="color-option color-white" title="原木色"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="product-item">
+                    <div class="product-image" data-image="https://images.unsplash.com/photo-1555041469-a586c61ea9bc?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" data-title="中古风转角书桌">
+                        <img src="https://images.unsplash.com/photo-1555041469-a586c61ea9bc?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" alt="中古风转角书桌">
+                    </div>
+                    <div class="product-info">
+                        <div class="product-name">中古风转角书桌</div>
+                        <div class="product-price">¥2,280 - ¥2,880</div>
+                        <div class="product-spec">
+                            <div class="spec-title">型号：</div>
+                            <div>中古风转角书桌</div>
+                            <div class="spec-title">尺寸：</div>
+                            <div>120*120*75</div>
+                            <div class="spec-title">颜色：</div>
+                            <div class="color-options">
+                                <div class="color-option color-cherry" title="樱桃色"></div>
+                                <div class="color-option color-walnut" title="胡桃木色"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="product-item">
+                    <div class="product-image" data-image="https://images.unsplash.com/photo-1503602642458-232111445657?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" data-title="中古风升降书桌">
+                        <img src="https://images.unsplash.com/photo-1503602642458-232111445657?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" alt="中古风升降书桌">
+                    </div>
+                    <div class="product-info">
+                        <div class="product-name">中古风升降书桌</div>
+                        <div class="product-price">¥2,580 - ¥3,280</div>
+                        <div class="product-spec">
+                            <div class="spec-title">型号：</div>
+                            <div>中古风升降书桌</div>
+                            <div class="spec-title">尺寸：</div>
+                            <div>140*70*65-85</div>
+                            <div class="spec-title">颜色：</div>
+                            <div class="color-options">
+                                <div class="color-option color-cherry" title="樱桃色"></div>
+                                <div class="color-option color-walnut" title="胡桃木色"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 中古风卡门柜产品列表 -->
+            <div class="product-list" id="cabinet-products">
+                <div class="product-item">
+                    <div class="product-image" data-image="https://images.unsplash.com/photo-1555041469-a586c61ea9bc?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" data-title="中古风卡门柜 A款">
+                        <img src="https://images.unsplash.com/photo-1555041469-a586c61ea9bc?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" alt="中古风卡门柜 A款">
+                    </div>
+                    <div class="product-info">
+                        <div class="product-name">中古风卡门柜 A款</div>
+                        <div class="product-price">¥2,280</div>
+                        <div class="product-spec">
+                            <div class="spec-title">型号：</div>
+                            <div>中古风卡门柜 A款</div>
+                            <div class="spec-title">尺寸：</div>
+                            <div>80*40*180</div>
+                            <div class="spec-title">颜色：</div>
+                            <div class="color-options">
+                                <div class="color-option color-cherry" title="樱桃色"></div>
+                                <div class="color-option color-white" title="白色"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="product-item">
+                    <div class="product-image" data-image="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" data-title="中古风卡门柜 B款">
+                        <img src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" alt="中古风卡门柜 B款">
+                    </div>
+                    <div class="product-info">
+                        <div class="product-name">中古风卡门柜 B款</div>
+                        <div class="product-price">¥2,580</div>
+                        <div class="product-spec">
+                            <div class="spec-title">型号：</div>
+                            <div>中古风卡门柜 B款</div>
+                            <div class="spec-title">尺寸：</div>
+                            <div>100*45*180</div>
+                            <div class="spec-title">颜色：</div>
+                            <div class="color-options">
+                                <div class="color-option color-walnut" title="胡桃木色"></div>
+                                <div class="color-option color-black" title="黑色"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 中古风电视柜产品列表 -->
+            <div class="product-list" id="tvstand-products">
+                <div class="product-item">
+                    <div class="product-image" data-image="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" data-title="中古风电视柜">
+                        <img src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" alt="中古风电视柜">
+                    </div>
+                    <div class="product-info">
+                        <div class="product-name">中古风电视柜</div>
+                        <div class="product-price">¥1,980 - ¥2,580</div>
+                        <div class="product-spec">
+                            <div class="spec-title">型号：</div>
+                            <div>中古风电视柜</div>
+                            <div class="spec-title">尺寸：</div>
+                            <div>180*40*45 / 200*45*50</div>
+                            <div class="spec-title">颜色：</div>
+                            <div class="color-options">
+                                <div class="color-option color-cherry" title="樱桃色"></div>
+                                <div class="color-option color-walnut" title="胡桃木色"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 其他分类产品列表 -->
+            <div class="product-list" id="table-products">
+                <div class="product-item">
+                    <div class="product-image" data-image="https://images.unsplash.com/photo-1555041469-a586c61ea9bc?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" data-title="中古风餐桌">
+                        <img src="https://images.unsplash.com/photo-1555041469-a586c61ea9bc?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" alt="中古风餐桌">
+                    </div>
+                    <div class="product-info">
+                        <div class="product-name">中古风餐桌</div>
+                        <div class="product-price">¥2,280 - ¥3,280</div>
+                        <div class="product-spec">
+                            <div class="spec-title">型号：</div>
+                            <div>中古风餐桌</div>
+                            <div class="spec-title">尺寸：</div>
+                            <div>140*80*75 / 160*90*75</div>
+                            <div class="spec-title">颜色：</div>
+                            <div class="color-options">
+                                <div class="color-option color-cherry" title="樱桃色"></div>
+                                <div class="color-option color-walnut" title="胡桃木色"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="product-list" id="bed-products">
+                <div class="product-item">
+                    <div class="product-image" data-image="https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" data-title="中古风床+妆台组合">
+                        <img src="https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" alt="中古风床+妆台组合">
+                    </div>
+                    <div class="product-info">
+                        <div class="product-name">中古风床+妆台组合</div>
+                        <div class="product-price">¥4,580 - ¥5,880</div>
+                        <div class="product-spec">
+                            <div class="spec-title">型号：</div>
+                            <div>中古风床+妆台组合</div>
+                            <div class="spec-title">尺寸：</div>
+                            <div>床: 180*200 / 妆台: 120*45*75</div>
+                            <div class="spec-title">颜色：</div>
+                            <div class="color-options">
+                                <div class="color-option color-cherry" title="樱桃色"></div>
+                                <div class="color-option color-walnut" title="胡桃木色"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="product-list" id="sofa-products">
+                <div class="product-item">
+                    <div class="product-image" data-image="https://images.unsplash.com/photo-1540574163026-643ea20ade25?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" data-title="中古风三人沙发">
+                        <img src="https://images.unsplash.com/photo-1540574163026-643ea20ade25?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" alt="中古风三人沙发">
+                    </div>
+                    <div class="product-info">
+                        <div class="product-name">中古风三人沙发</div>
+                        <div class="product-price">¥3,280 - ¥4,580</div>
+                        <div class="product-spec">
+                            <div class="spec-title">型号：</div>
+                            <div>中古风三人沙发</div>
+                            <div class="spec-title">尺寸：</div>
+                            <div>210*90*85</div>
+                            <div class="spec-title">颜色：</div>
+                            <div class="color-options">
+                                <div class="color-option color-cherry" title="樱桃色"></div>
+                                <div class="color-option color-walnut" title="胡桃木色"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="product-list" id="teatable-products">
+                <div class="product-item">
+                    <div class="product-image" data-image="https://images.unsplash.com/photo-1551298370-9d3d53740c72?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" data-title="新款中古风茶几">
+                        <img src="https://images.unsplash.com/photo-1551298370-9d3d53740c72?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" alt="新款中古风茶几">
+                    </div>
+                    <div class="product-info">
+                        <div class="product-name">新款中古风茶几</div>
+                        <div class="product-price">¥880 - ¥1,280</div>
+                        <div class="product-spec">
+                            <div class="spec-title">型号：</div>
+                            <div>新款中古风茶几</div>
+                            <div class="spec-title">尺寸：</div>
+                            <div>120*60*45 / 100*50*45</div>
+                            <div class="spec-title">颜色：</div>
+                            <div class="color-options">
+                                <div class="color-option color-cherry" title="樱桃色"></div>
+                                <div class="color-option color-walnut" title="胡桃木色"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="product-list" id="shelf-products">
+                <div class="product-item">
+                    <div class="product-image" data-image="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" data-title="中古风收纳架">
+                        <img src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" alt="中古风收纳架">
+                    </div>
+                    <div class="product-info">
+                        <div class="product-name">中古风收纳架</div>
+                        <div class="product-price">¥680 - ¥1,080</div>
+                        <div class="product-spec">
+                            <div class="spec-title">型号：</div>
+                            <div>中古风收纳架</div>
+                            <div class="spec-title">尺寸：</div>
+                            <div>80*30*120 / 100*35*150</div>
+                            <div class="spec-title">颜色：</div>
+                            <div class="color-options">
+                                <div class="color-option color-cherry" title="樱桃色"></div>
+                                <div class="color-option color-walnut" title="胡桃木色"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="product-list" id="drawer-products">
+                <div class="product-item">
+                    <div class="product-image" data-image="https://images.unsplash.com/photo-1555041469-a586c61ea9bc?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" data-title="中古风斗柜">
+                        <img src="https://images.unsplash.com/photo-1555041469-a586c61ea9bc?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" alt="中古风斗柜">
+                    </div>
+                    <div class="product-info">
+                        <div class="product-name">中古风斗柜</div>
+                        <div class="product-price">¥1,580 - ¥2,280</div>
+                        <div class="product-spec">
+                            <div class="spec-title">型号：</div>
+                            <div>中古风斗柜</div>
+                            <div class="spec-title">尺寸：</div>
+                            <div>80*45*90 / 100*50*90</div>
+                            <div class="spec-title">颜色：</div>
+                            <div class="color-options">
+                                <div class="color-option color-cherry" title="樱桃色"></div>
+                                <div class="color-option color-walnut" title="胡桃木色"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p>精品家具 &copy; 2023 - 中古风家具专家</p>
+        </div>
+    </div>
+    
+    <!-- 图片放大模态框 -->
+    <div class="image-modal" id="imageModal">
+        <button class="modal-close" id="closeImageModal">&times;</button>
+        <img class="modal-image" id="modalImage" src="" alt="">
+        <div class="image-title" id="modalTitle"></div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 页面元素
+            const homePage = document.getElementById('home-page');
+            const productListPage = document.getElementById('product-list-page');
+            const backButton = document.getElementById('backButton');
+            const productPageTitle = document.getElementById('productPageTitle');
+            const productListTitle = document.getElementById('productListTitle');
+            
+            // 获取所有分类项
+            const categoryItems = document.querySelectorAll('.category-item');
+            
+            // 获取所有产品列表
+            const productLists = document.querySelectorAll('.product-list');
+            
+            // 为每个分类项添加点击事件
+            categoryItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    // 获取当前分类的标识和名称
+                    const category = this.getAttribute('data-category');
+                    const categoryName = this.querySelector('.category-name').textContent;
+                    
+                    // 跳转到商品列表页
+                    goToProductList(category, categoryName);
+                });
+            });
+            
+            // 返回按钮点击事件
+            backButton.addEventListener('click', function() {
+                // 返回首页
+                homePage.classList.add('active');
+                productListPage.classList.remove('active');
+            });
+            
+            // 跳转到商品列表页函数
+            function goToProductList(category, categoryName) {
+                // 更新页面标题
+                productPageTitle.textContent = categoryName;
+                productListTitle.textContent = categoryName + '产品列表';
+                
+                // 隐藏所有产品列表
+                productLists.forEach(list => list.classList.remove('active'));
+                
+                // 显示对应分类的产品列表
+                const targetProductList = document.getElementById(`${category}-products`);
+                if (targetProductList) {
+                    targetProductList.classList.add('active');
+                }
+                
+                // 切换到商品列表页
+                homePage.classList.remove('active');
+                productListPage.classList.add('active');
+            }
+            
+            // 图片放大功能
+            const imageModal = document.getElementById('imageModal');
+            const modalImage = document.getElementById('modalImage');
+            const modalTitle = document.getElementById('modalTitle');
+            const closeImageModal = document.getElementById('closeImageModal');
+            
+            // 为所有商品图片添加点击事件
+            document.addEventListener('click', function(e) {
+                if (e.target.closest('.product-image')) {
+                    const imageElement = e.target.closest('.product-image');
+                    const imageUrl = imageElement.getAttribute('data-image');
+                    const title = imageElement.getAttribute('data-title');
+                    
+                    modalImage.src = imageUrl;
+                    modalTitle.textContent = title;
+                    imageModal.classList.add('active');
+                }
+            });
+            
+            // 关闭图片模态框
+            closeImageModal.addEventListener('click', function() {
+                imageModal.classList.remove('active');
+            });
+            
+            // 点击模态框外部关闭
+            imageModal.addEventListener('click', function(e) {
+                if (e.target === imageModal) {
+                    imageModal.classList.remove('active');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
